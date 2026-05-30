@@ -3,7 +3,7 @@ import os
 import gspread
 import base64
 from google.oauth2.service_account import Credentials
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 import json
 
 # ── Autenticação Google ────────────────────────────────────────────────────────
@@ -77,7 +77,7 @@ def atualizar_planilha():
     total_produtos = len(produtos)
     estoque_baixo  = sum(1 for p in produtos if p["estoque"]["saldoVirtualTotal"] < 10)
     estoque_medio  = sum(1 for p in produtos if 10 <= p["estoque"]["saldoVirtualTotal"] < 20)
-    agora          = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    agora = datetime.now(timezone(timedelta(hours=-3))).strftime("%d/%m/%Y %H:%M:%S")
 
     sheet.update(values=[[
         f"Total: {total_produtos} produtos",
